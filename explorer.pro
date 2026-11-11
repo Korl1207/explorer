@@ -1,8 +1,11 @@
 QT += core widgets
-CONFEG += c++17
+CONFIG += c++17
 TEMPLATE = app
-TARGET = edu
+TARGET = explorer
 
+HEADERS += \
+  src/mainwindow.h
 
 SOURCES += \
-  src/main.cpp
+  src/main.cpp \
+  src/mainwindow.cpp

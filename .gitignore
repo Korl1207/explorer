@@ -2,3 +2,7 @@ make-build/
 .vscode/settings.json
 .vscode/launch.json
 .vscode/tasks.jsopn
+
+AGENTS.md
+
+*build/
