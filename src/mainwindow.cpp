@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
   pathLine_->setFocusPolicy(Qt::ClickFocus);
   menuBarPanel->addWidget(pathLine_);
 
-  connect(filesList_, &QListWidget::itemDoubleClicked, this,
+  connect(filesList_, &QListWidget::itemActivated, this,
   [this](QListWidgetItem* item) {
     if (item->text() == "..") {
       QDir parent = currentDir_;
@@ -26,14 +26,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
         openDirectory(parent.absolutePath());
       return;
     }
-
     const QString path = currentDir_.filePath(item->text());
     if (QFileInfo(path).isDir())
       openDirectory(path);
   });
   connect(pathLine_, &QLineEdit::returnPressed, this, 
     [this] {
-      statusBar()->showMessage(pathLine_->text());
+      openDirectory(pathLine_->text());
   });
   openDirectory(QDir::homePath());
 }
