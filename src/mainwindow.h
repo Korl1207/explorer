@@ -15,14 +15,14 @@ class MainWindow : public QMainWindow {
 
  public:
   explicit MainWindow(QWidget* parent=nullptr);
-
+  void openDirectory(const QString& path);
 
  private:
   QWidget* central_;
   QWidget* menuBar_;
   QLineEdit* pathLine_;
 
-  QDir *currentDir_;
+  QDir currentDir_;
   QListWidget* filesList_;
   
 };
