@@ -1,27 +1,35 @@
 #include "mainwindow.h"
 
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QLineEdit>
-#include <QLabel>
+#include <QStatusBar>
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
-  setWindowTitle("Explorer");
-  resize(900, 600);
 
-  // Основной контейнер с содержимым
-  auto *central = new QWidget(this);
-  setCentralWidget(central);
+  // getting current directory and files from where
+  currentDir_ = new QDir(QDir::homePath());
+  const QStringList names = currentDir_->entryList(
+    QDir::Dirs | QDir::Files, QDir::DirsFirst | QDir::Name | QDir::IgnoreCase
+  );
 
-  auto *layout = new QVBoxLayout(central);
+  // show files  
+  filesList_ = new QListWidget(this);
+  filesList_->addItems(names);
+  setCentralWidget(filesList_);
+  connect(filesList_, &QListWidget::itemDoubleClicked, this, 
+    [this](QListWidgetItem *item){
+      statusBar()->showMessage(item->text(), 2000);
+  });
 
-  auto addressBar = new QLineEdit(central);
-  addressBar->setPlaceholderText("");
-  
-  auto *placeholder = new QLabel("Содержимое папки", central);
 
-  placeholder->setAlignment(Qt::AlignCenter);
+  // path line 
+  menuBar_ = new QWidget(this);
+  setMenuWidget(menuBar_);
+  QHBoxLayout *menuBarPanel = new QHBoxLayout(menuBar_);
+  menuBar_->setLayout(menuBarPanel);
+  pathLine_ = new QLineEdit(this);
+  pathLine_->setFocusPolicy(Qt::ClickFocus);
+  pathLine_->setText(currentDir_->absolutePath());
+  menuBarPanel->addWidget(pathLine_);
 
-  layout->addWidget(addressBar);
-  layout->addWidget(placeholder,1);
+
 }
