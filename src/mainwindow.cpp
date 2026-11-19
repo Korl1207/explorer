@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 
 #include <QStatusBar>
+#include <QUrl>
+#include <QDesktopServices>
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -27,8 +29,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
       return;
     }
     const QString path = currentDir_.filePath(item->text());
-    if (QFileInfo(path).isDir())
+    const QFileInfo info(path);
+    if (info.isDir()){
       openDirectory(path);
+    } else if(info.isFile()){
+      if(!QDesktopServices::openUrl(QUrl::fromLocalFile(path)))
+        statusBar()->showMessage(tr("Не удалось открыть файл!"), 3000);
+    }
   });
   connect(pathLine_, &QLineEdit::returnPressed, this, 
     [this] {
